@@ -18,7 +18,7 @@
         "Other"
     ],
     "author": "yinhang",
-    "repository": "https://github.com/dehuinet/atom-minxing-package.git",
+    "repository": "https://github.com/dehuinet/vscode-minxing-extension",
     "license": "GPL-3.0",
     "main": "./out/extension",
     "activationEvents": [

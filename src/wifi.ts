@@ -15,7 +15,13 @@ export default {
         const port: number =  Utils.getRandomNum(1001, 9999);
         MXAPI.Wifi.start({
             tempPath,
-            port
+            port,
+            onConnection: () => {
+                this.setStatusBarMessage();
+            },
+            onClose: () => {
+                this.setStatusBarMessage();
+            }
         });
         this.setStatusBarMessage();
     },

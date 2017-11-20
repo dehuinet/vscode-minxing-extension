@@ -10,7 +10,7 @@
       "日志输出"
     ],
     "version": "0.0.2",
-    "publisher": "dehuinet",
+    "publisher": "dinglb@dehuinet.com",
     "engines": {
         "vscode": "^1.17.0"
     },

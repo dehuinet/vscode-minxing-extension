@@ -1,0 +1,1 @@
+export * from './wifi_info.model';

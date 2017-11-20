@@ -1,8 +1,15 @@
 {
     "name": "vscode-minxing-extension",
     "displayName": "Minxing-devtools",
-    "description": "minxing devtools",
-    "version": "0.0.1",
+    "description": "适用于Minxing开发平台的开发工具,包含创建应用模板,WiFi真机同步,日志输出等功能",
+    "keywords": [
+      "Minxing",
+      "真机调试",
+      "WiFi同步",
+      "应用模板",
+      "日志输出"
+    ],
+    "version": "0.0.2",
     "publisher": "Minxing-devtools",
     "engines": {
         "vscode": "^1.17.0"
@@ -10,6 +17,9 @@
     "categories": [
         "Other"
     ],
+    "author": "yinhang",
+    "repository": "https://github.com/dehuinet/atom-minxing-package.git",
+    "license": "GPL-3.0",
     "main": "./out/extension",
     "activationEvents": [
         "*"
@@ -23,37 +33,37 @@
             "command": "Minxing.addProjectTemplate",
             "title": "新增项目模版",
             "category": "Minxing",
-            "detail": "add project template"
+            "description": "add project template"
         }, {
             "command": "Minxing.addPageTemplate",
             "title": "新增页面框架",
             "category": "Minxing",
-            "detail": "add page template"
+            "description": "add page template"
         }, {
             "command": "Minxing.build",
             "title": "打包",
             "category": "Minxing",
-            "detail": "build to Minxing"
+            "description": "build to Minxing"
         }, {
             "command": "Minxing.getWifiInfo",
             "title": "查看IP和端口",
             "category": "Minxing",
-            "detail": "get local IP and port"
+            "description": "get local IP and port"
         }, {
             "command": "Minxing.getWifiLog",
             "title": "查看wifi日志",
             "category": "Minxing",
-            "detail": "get wifi log"
+            "description": "get wifi log"
+        },  {
+            "command": "Minxing.syncAll",
+            "title": "wifi全量同步",
+            "category": "Minxing",
+            "description": "sync all by wifi"
         }, {
             "command": "Minxing.sync",
             "title": "wifi增量同步",
             "category": "Minxing",
-            "detail": "smart sync by wifi"
-        }, {
-            "command": "Minxing.syncAll",
-            "title": "wifi全量同步",
-            "category": "Minxing",
-            "detail": "sync all by wifi"
+            "description": "smart sync by wifi"
         }],
         "menus": {
             "explorer/context": [
@@ -63,7 +73,6 @@
                 }
             ],
             "editor/context": [{
-                "when": "resourceLangId == html",
                 "command": "Minxing.mainEntry",
                 "group": "navigation"
             }]
@@ -76,7 +85,6 @@
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
-    "repository": "",
     "dependencies": {
         "minxing-devtools-core": "^1.0.0"
     },

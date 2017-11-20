@@ -18,10 +18,11 @@ export default {
         const quickItems: Array<vscode.QuickPickItem> = commandsConfig
                 .filter(c => c.command !== "Minxing.mainEntry")
                 .map(cmd => Object.assign({}, cmd, {"label": cmd.title}));
-
         vscode.window.showQuickPick(quickItems, {
+            matchOnDescription: true,
             placeHolder: '选择要进行的操作'
         }).then(data => {
+            if (!data) return;
             const namespace = 'Minxing';
             const cmd = (<CommandConfig>data).command;
             if (!(new RegExp(`^${namespace}`)).test(cmd)) {

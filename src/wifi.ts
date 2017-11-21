@@ -95,5 +95,60 @@ export default {
 
         const projectName = path.basename(projectRootInfo.project);
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
+    },
+    webPreview() {
+        const {
+            port,
+            ip,
+            connectionCount
+        }: WifiInfo = MXAPI.Wifi.info();
+        if (0 === connectionCount) {
+            output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
+        }
+
+        vscode.window.showInputBox({
+            "placeHolder": "9200/index.html",
+            "prompt": `请输入本地web工程页面,以端口开始`
+        })
+        .then(src => {
+            if (src) {
+                const err = MXAPI.Wifi.webPreview({
+                    src
+                })
+                if (err) {
+                    output.warn(err);
+                    return;
+                }
+                output.info('预览成功!');
+            }
+        }, e => {
+            console.log(`show input box error->${e}`);
+        });
+    },
+    singlePagePreview(uri) {
+        
+        const filePath = Utils.getPathOrActive(uri);
+        if (!filePath) {
+            output.warn("似乎没有可供预览的文件")
+            return;
+        }
+        const fileName = path.basename(filePath);
+        const htmlReg = /(.*\.html)$/;
+        if (!htmlReg.test(fileName)) {
+            output.warn("似乎没有可供预览的文件");
+            return;
+        }
+        const {
+            port,
+            ip,
+            connectionCount
+        } = MXAPI.Wifi.info()
+        if (0 === connectionCount) {
+            output.warn("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用")
+        }
+        MXAPI.Wifi.preview({
+            file: filePath
+        })
+        output.info(`${fileName}同步成功,请在手机上查看运行效果!`);
     }
 }

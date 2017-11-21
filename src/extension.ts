@@ -10,7 +10,9 @@ import commandsConfig from './config';
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     output.init();
-    
+    output.log('output log!');
+    output.showChannel();
+    console.log('console log');
     wifi.start();
     wifi.log();
     initCommands(context);

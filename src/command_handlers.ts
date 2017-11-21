@@ -40,5 +40,7 @@ export default {
     getWifiLog: wifi.getWifiLog.bind(wifi),
     sync: wifi.syncWifi.bind(wifi),
     syncAll: wifi.syncAllWifi.bind(wifi),
+    webPreview: wifi.webPreview.bind(wifi),
+    singlePagePreview: wifi.singlePagePreview.bind(wifi),
     build 
 }

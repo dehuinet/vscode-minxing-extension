@@ -30,10 +30,7 @@ export default {
             level,
             content
         }) => {
-            level = level || 'log';
-            if ((level in console) && (console[level] instanceof Function)) {
-                output.log(content);
-            }
+            output.log(content);
         })
         .then(() => {
             console.log("启动WiFi日志服务...");

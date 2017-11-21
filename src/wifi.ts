@@ -30,7 +30,16 @@ export default {
             level,
             content
         }) => {
-            output.log(content);
+            if (!(level in console) || !(console[level] instanceof Function)) {
+                level = 'log'
+            }
+            try{
+                console[level](JSON.parse(content));
+                output.log(JSON.parse(content));
+            } catch(e) {
+                console[level](content);
+                output.log(content);
+            }
         })
         .then(() => {
             console.log("启动WiFi日志服务...");

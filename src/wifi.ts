@@ -71,7 +71,7 @@ export default {
     syncWifi(uri) {
         this.syncAllWifi(uri, false);
     },
-    syncAllWifi(uri, syncAll: boolean) {
+    syncAllWifi(uri, syncAll: boolean = true) {
         const filePath = Utils.getActivePathOrProject(uri);
         if (!filePath) {
             output.noActive();
@@ -96,7 +96,7 @@ export default {
         
         MXAPI.Wifi.sync({
             project: projectRootInfo.project,
-            updateAll: syncAll
+            updateAll: updateAll
         });
 
         const projectName = path.basename(projectRootInfo.project);

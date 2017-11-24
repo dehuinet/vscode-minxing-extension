@@ -14,7 +14,7 @@ export default (uri) => {
     const projectRootInfo = MXAPI.Utils.fetchProjectRootInfoByFile(filePath);
 
     if (!projectRootInfo) {
-        this.invalidProject(filePath);
+        output.invalidProject(filePath);
         return;
     };
     window.showOpenDialog({

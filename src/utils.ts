@@ -18,6 +18,7 @@ export function getRandomNum(min: number, max: number): number {
 
 
 export function getPathOrActive(uri): string {
+    uri = uri && uri.fsPath ? uri.fsPath : uri;
     let filePath = uri;
     if (!filePath) {
         const editor = vscode.window.activeTextEditor;

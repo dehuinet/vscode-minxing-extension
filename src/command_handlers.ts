@@ -36,6 +36,7 @@ export default {
     },
     addProjectTemplate,
     addPageTemplate,
+    clearTempCache: wifi.clearTempCache,
     getWifiInfo: wifi.getWifiInfo.bind(wifi),
     getWifiLog: wifi.getWifiLog.bind(wifi),
     sync: wifi.syncWifi.bind(wifi),

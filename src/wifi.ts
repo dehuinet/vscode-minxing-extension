@@ -25,6 +25,10 @@ export default {
         });
         this.setStatusBarMessage();
     },
+    clearTempCache() {
+        const tempPath: string = Utils.getTempPath();
+        MXAPI.clearTemp(tempPath);
+    },
     log() {
         MXAPI.Wifi.log(({
             level,

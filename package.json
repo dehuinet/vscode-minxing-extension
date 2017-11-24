@@ -84,6 +84,12 @@
                 "title": "wifi单页预览",
                 "category": "Minxing",
                 "description": "wifi single page preview"
+            },
+            {
+                "command": "Minxing.clearTempCache",
+                "title": "清除临时文件缓存",
+                "category": "Minxing",
+                "description": "clear temp cache"
             }
         ],
         "menus": {

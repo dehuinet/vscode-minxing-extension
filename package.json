@@ -1,7 +1,7 @@
 {
     "name": "vscode-minxing-extension",
     "displayName": "Minxing-devtools",
-    "description": "适用于Minxing开发平台的开发工具,包含创建应用模板,WiFi真机同步,日志输出等功能",
+    "description": "适用于敏行移动平台的开发工具,包含创建应用模板,WiFi真机同步,日志输出等功能",
     "keywords": [
         "Minxing",
         "真机调试",
@@ -9,7 +9,7 @@
         "应用模板",
         "日志输出"
     ],
-    "version": "0.0.13",
+    "version": "0.0.16",
     "publisher": "minxing",
     "engines": {
         "vscode": "^1.17.0"
@@ -78,12 +78,6 @@
                 "title": "wifi web页面预览",
                 "category": "Minxing",
                 "description": "wifi web preview"
-            },
-            {
-                "command": "Minxing.singlePagePreview",
-                "title": "wifi单页预览",
-                "category": "Minxing",
-                "description": "wifi single page preview"
             },
             {
                 "command": "Minxing.clearTempCache",

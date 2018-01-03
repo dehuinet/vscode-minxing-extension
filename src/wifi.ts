@@ -112,16 +112,18 @@ export default {
             ip,
             connectionCount
         }: WifiInfo = MXAPI.Wifi.info();
-        if (0 === connectionCount) {
-            output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
-        }
+        
 
         vscode.window.showInputBox({
-            "placeHolder": "9200/index.html",
+            "value": `${ip}:9200/index.html`,
             "prompt": `请输入本地web工程页面,以端口开始`
         })
         .then(src => {
+            console.log('src-->', src);
             if (src) {
+                if (0 === connectionCount) {
+                    output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
+                }
                 const err = MXAPI.Wifi.webPreview({
                     src
                 })

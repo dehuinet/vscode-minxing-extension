@@ -53,9 +53,12 @@ export default {
         const {
             port,
             ip,
-            connectionCount
+            connectionCount,
+            remoteIps
         } : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
-        const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}`;
+        const ips = remoteIps.map(ip => ip.replace(/^::ffff:/i, ''));
+        const ipStr = ips.length === 0 ? '' : `,客户端:${ips.join(', ')}`;
+        const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
         vscode.window.setStatusBarMessage(status);
     },
     getWifiInfo() {
@@ -86,7 +89,7 @@ export default {
             output.invalidProject(filePath);
             return;
         };
-        
+
         const {
             port,
             ip,
@@ -95,9 +98,9 @@ export default {
         if (0 === connectionCount) {
             output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
         }
-        
+
         const updateAll: number = syncAll ? 1 : 0;
-        
+
         MXAPI.Wifi.sync({
             project: projectRootInfo.project,
             updateAll: updateAll
@@ -112,7 +115,7 @@ export default {
             ip,
             connectionCount
         }: WifiInfo = MXAPI.Wifi.info();
-        
+
 
         vscode.window.showInputBox({
             "value": `${ip}:9200/index.html`,
@@ -138,7 +141,7 @@ export default {
         });
     },
     singlePagePreview(uri) {
-        
+
         const filePath = Utils.getPathOrActive(uri);
         if (!filePath) {
             output.warn("似乎没有可供预览的文件")

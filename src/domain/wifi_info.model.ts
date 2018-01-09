@@ -3,4 +3,5 @@ export interface WifiInfo{
     port?: number;
     connectionCount?: number;
     remoteIps?: Array<string>;
+    remoteIp: string;
 }

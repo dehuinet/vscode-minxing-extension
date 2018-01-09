@@ -3,6 +3,7 @@
 import { WifiInfo } from './domain';
 import * as vscode from 'vscode';
 import * as Utils from './utils';
+import * as _ from 'underscore';
 
 import * as MXAPI from 'minxing-devtools-core';
 
@@ -14,14 +15,9 @@ export default {
         const tempPath: string = Utils.getTempPath();
         const port: number =  Utils.getRandomNum(1001, 9999);
         MXAPI.Wifi.start({
-            tempPath,
-            port,
-            onConnection: () => {
-                this.setStatusBarMessage();
-            },
-            onClose: () => {
-                this.setStatusBarMessage();
-            }
+            tempPath, port,
+            onConnection: () => this.setStatusBarMessage('open'),
+            onClose: () => this.setStatusBarMessage('close')
         });
         this.setStatusBarMessage();
     },
@@ -49,17 +45,29 @@ export default {
             console.log("启动WiFi日志服务...");
         })
     },
-    setStatusBarMessage() {
+    setStatusBarMessage(type:string) {
         const {
             port,
             ip,
             connectionCount,
-            remoteIps
+            remoteIps,
+            remoteIp
         } : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
         const ips = remoteIps.map(ip => ip.replace(/^::ffff:/i, ''));
-        const ipStr = ips.length === 0 ? '' : `,客户端:${ips.join(', ')}`;
+        const ipStr = _.isEmpty(ips) ? '' : `,客户端:${ips.join(', ')}`;
         const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
         vscode.window.setStatusBarMessage(status);
+        if (!_.isEmpty(remoteIp)) {
+            const rIp = remoteIp.replace(/^::ffff:/i, '');
+            switch (type) {
+            case 'open':
+                vscode.window.showInformationMessage(`调试终端 [${rIp}] 已连接到 VSCode。可以开始调试了...`);
+                break;
+            case 'close':
+                vscode.window.showInformationMessage(`调试终端 [${rIp}] 已断离 VSCode`);
+                break;
+            }
+        }
     },
     getWifiInfo() {
         const {

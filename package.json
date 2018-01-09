@@ -9,7 +9,7 @@
         "应用模板",
         "日志输出"
     ],
-    "version": "0.0.20",
+    "version": "0.0.21",
     "publisher": "minxing",
     "engines": {
         "vscode": "^1.17.0"
@@ -25,65 +25,80 @@
         "*"
     ],
     "contributes": {
-        "commands": [{
-            "command": "Minxing.mainEntry",
-            "title": "敏行",
-            "category": "Minxing"
-        }, {
-            "command": "Minxing.addProjectTemplate",
-            "title": "新增项目模版",
-            "category": "Minxing",
-            "description": "add project template"
-        }, {
-            "command": "Minxing.addPageTemplate",
-            "title": "新增页面框架",
-            "category": "Minxing",
-            "description": "add page template"
-        }, {
-            "command": "Minxing.build",
-            "title": "打包",
-            "category": "Minxing",
-            "description": "build to Minxing"
-        }, {
-            "command": "Minxing.getWifiInfo",
-            "title": "查看IP和端口",
-            "category": "Minxing",
-            "description": "get local IP and port"
-        }, {
-            "command": "Minxing.getWifiLog",
-            "title": "查看wifi日志",
-            "category": "Minxing",
-            "description": "get wifi log"
-        }, {
-            "command": "Minxing.syncAll",
-            "title": "wifi全量同步",
-            "category": "Minxing",
-            "description": "sync all by wifi"
-        }, {
-            "command": "Minxing.sync",
-            "title": "wifi增量同步",
-            "category": "Minxing",
-            "description": "smart sync by wifi"
-        }, {
-            "command": "Minxing.webPreview",
-            "title": "wifi web页面预览",
-            "category": "Minxing",
-            "description": "wifi web preview"
-        }, {
-            "command": "Minxing.clearTempCache",
-            "title": "清除临时文件缓存",
-            "category": "Minxing",
-            "description": "clear temp cache"
-        }],
+        "commands": [
+            {
+                "command": "Minxing.mainEntry",
+                "title": "敏行",
+                "category": "Minxing"
+            },
+            {
+                "command": "Minxing.addProjectTemplate",
+                "title": "新增项目模版",
+                "category": "Minxing",
+                "description": "add project template"
+            },
+            {
+                "command": "Minxing.addPageTemplate",
+                "title": "新增页面框架",
+                "category": "Minxing",
+                "description": "add page template"
+            },
+            {
+                "command": "Minxing.build",
+                "title": "打包",
+                "category": "Minxing",
+                "description": "build to Minxing"
+            },
+            {
+                "command": "Minxing.getWifiInfo",
+                "title": "查看IP和端口",
+                "category": "Minxing",
+                "description": "get local IP and port"
+            },
+            {
+                "command": "Minxing.getWifiLog",
+                "title": "查看wifi日志",
+                "category": "Minxing",
+                "description": "get wifi log"
+            },
+            {
+                "command": "Minxing.syncAll",
+                "title": "wifi全量同步",
+                "category": "Minxing",
+                "description": "sync all by wifi"
+            },
+            {
+                "command": "Minxing.sync",
+                "title": "wifi增量同步",
+                "category": "Minxing",
+                "description": "smart sync by wifi"
+            },
+            {
+                "command": "Minxing.webPreview",
+                "title": "wifi web页面预览",
+                "category": "Minxing",
+                "description": "wifi web preview"
+            },
+            {
+                "command": "Minxing.clearTempCache",
+                "title": "清除临时文件缓存",
+                "category": "Minxing",
+                "description": "clear temp cache"
+            }
+        ],
         "menus": {
-            "explorer/context": [{
-                "command": "Minxing.mainEntry",
-                "group": "navigation"
-            }],
-            "editor/context": [{
-                "command": "Minxing.mainEntry",
-                "group": "navigation"
-            }]
+            "explorer/context": [
+                {
+                    "command": "Minxing.mainEntry",
+                    "group": "navigation"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "Minxing.mainEntry",
+                    "group": "navigation"
+                }
+            ]
         }
     },
     "scripts": {

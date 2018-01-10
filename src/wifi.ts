@@ -109,20 +109,18 @@ export default {
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
     },
     webPreview: co.wrap(function *(){
+        const STORAGE_KEY = 'webPreview-url-history';
         try {
             const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
+            const localstorage: LocalStorage = yield Utils.getLocalStorage();
+            const history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
+                JSON.parse(localstorage.getItem(STORAGE_KEY));
             const src = yield vscode.window.showInputBox({
-                "value": `${ip}:9200/index.html`,
-                "prompt": `请输入本地web工程页面,以端口开始`
+                value: _.isEmpty(history) ? `${ip}:9200/index.html` : history[history.length - 1],
+                prompt: `请输入本地web工程页面,以端口开始`
             });
             console.log('src-->', src, 'tmp dir path', Utils.getTempPath());
-            if (src) {
-                const STORAGE_KEY = 'webPreview-url-history';
-                const localstorage: LocalStorage = yield Utils.getLocalStorage();
-                let history: Array<string> = [];
-                if (localstorage.getItem(STORAGE_KEY) != null) {
-                    history = JSON.parse(localstorage.getItem(STORAGE_KEY));
-                }
+            if (!_.isEmpty(src)) {
                 if (history.indexOf(src) === -1) {
                     history.push(src);
                     localstorage.setItem(STORAGE_KEY, JSON.stringify(history));

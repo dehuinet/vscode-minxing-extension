@@ -112,7 +112,7 @@
         "co": "^4.6.0",
         "debug": "^3.1.0",
         "fs-promise": "^2.0.3",
-        "minxing-devtools-core": "^1.0.0",
+        "minxing-devtools-core": "^1.0.17",
         "node-localstorage": "^1.3.0",
         "underscore": "^1.8.3"
     },

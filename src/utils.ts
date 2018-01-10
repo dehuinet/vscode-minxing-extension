@@ -2,21 +2,33 @@
 
 import * as MXAPI from 'minxing-devtools-core';
 import * as vscode from 'vscode';
-import {
-    WifiInfo
-} from './domain';
+import * as storage from 'node-localstorage';
 import * as path from 'path';
+import co from 'co';
+import * as fsp from 'fs-promise';
+import {WifiInfo, LocalStorage} from './domain';
+
+let localStoragePromise;
+
 export function getTempPath(): string {
     const tempPath = path.resolve(path.dirname(__dirname), 'temp');
     return tempPath;
+}
+export function getLocalStorage(): Promise<LocalStorage> {
+    if (localStoragePromise == null) {
+        localStoragePromise = co(function*(){
+            const storageHome = path.join(getTempPath(), 'localstorage');
+            yield fsp.mkdirs(storageHome);
+            return new storage.LocalStorage(storageHome);
+        });
+    }
+    return localStoragePromise;
 }
 export function getRandomNum(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
 export function getPathOrActive(uri): string {
     uri = uri && uri.fsPath ? uri.fsPath : uri;
     let filePath = uri;

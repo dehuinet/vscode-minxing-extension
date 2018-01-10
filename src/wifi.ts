@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as MXAPI from 'minxing-devtools-core';
 import co from 'co';
-import {WifiInfo} from './domain';
+import {WifiInfo, LocalStorage} from './domain';
 import * as Utils from './utils';
 import output from './output';
 
@@ -115,8 +115,18 @@ export default {
                 "value": `${ip}:9200/index.html`,
                 "prompt": `请输入本地web工程页面,以端口开始`
             });
-            console.log('src-->', src);
+            console.log('src-->', src, 'tmp dir path', Utils.getTempPath());
             if (src) {
+                const STORAGE_KEY = 'webPreview-url-history';
+                const localstorage: LocalStorage = yield Utils.getLocalStorage();
+                let history: Array<string> = [];
+                if (localstorage.getItem(STORAGE_KEY) != null) {
+                    history = JSON.parse(localstorage.getItem(STORAGE_KEY));
+                }
+                if (history.indexOf(src) === -1) {
+                    history.push(src);
+                    localstorage.setItem(STORAGE_KEY, JSON.stringify(history));
+                }
                 if (0 === connectionCount) {
                     output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
                 }

@@ -1,14 +1,11 @@
-'use strict';
-
-import { WifiInfo } from './domain';
-import * as vscode from 'vscode';
-import * as Utils from './utils';
 import * as _ from 'underscore';
-
-import * as MXAPI from 'minxing-devtools-core';
-
-import output from './output';
 import * as path from 'path';
+import * as vscode from 'vscode';
+import * as MXAPI from 'minxing-devtools-core';
+import co from 'co';
+import {WifiInfo} from './domain';
+import * as Utils from './utils';
+import output from './output';
 
 export default {
     start() {
@@ -111,37 +108,29 @@ export default {
         const projectName = path.basename(projectRootInfo.project);
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
     },
-    webPreview() {
-        const {
-            port,
-            ip,
-            connectionCount
-        }: WifiInfo = MXAPI.Wifi.info();
-
-
-        vscode.window.showInputBox({
-            "value": `${ip}:9200/index.html`,
-            "prompt": `请输入本地web工程页面,以端口开始`
-        })
-        .then(src => {
+    webPreview: co.wrap(function *(){
+        try {
+            const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
+            const src = yield vscode.window.showInputBox({
+                "value": `${ip}:9200/index.html`,
+                "prompt": `请输入本地web工程页面,以端口开始`
+            });
             console.log('src-->', src);
             if (src) {
                 if (0 === connectionCount) {
                     output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
                 }
-                const err = MXAPI.Wifi.webPreview({
-                    src
-                })
+                const err = MXAPI.Wifi.webPreview({src});
                 if (err) {
                     output.warn(err);
                     return;
                 }
                 output.info('预览成功!');
             }
-        }, e => {
-            console.log(`show input box error->${e}`);
-        });
-    },
+        } catch (err) {
+            console.log(`show input box error->${err}`);
+        }
+    }),
     singlePagePreview(uri) {
 
         const filePath = Utils.getPathOrActive(uri);

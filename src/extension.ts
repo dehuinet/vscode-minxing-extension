@@ -11,7 +11,7 @@ import commandsConfig from './config';
 export function activate(context: vscode.ExtensionContext) {
     output.init();
     output.showChannel();
-    wifi.start();
+    wifi.start(context);
     wifi.log();
     initCommands(context);
 }

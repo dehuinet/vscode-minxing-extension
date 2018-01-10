@@ -9,13 +9,11 @@ function setStatusBarMessage(clientIps:Array<string> = []) {
     const ips = clientIps.map(ip => ip.replace(/^::ffff:/i, ''));
     const ipStr = _.isEmpty(ips) ? '' : `,客户端:${ips.join(', ')}`;
     const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
-    if (statusBarItem == null) {
-        statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 2);
-    }
     statusBarItem.text = status;
+    return statusBarItem;
 }
 export default {
-    start() {
+    start(context) {
         const tempPath: string = Utils.getTempPath();
         const port: number =  Utils.getRandomNum(1001, 9999);
         MXAPI.Wifi.start({
@@ -29,7 +27,12 @@ export default {
                 vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已断离 VSCode`);
             }
         });
+        statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 2);
+        statusBarItem.tooltip = '客户端连接状态';
+        statusBarItem.command = 'Minxing.getWifiInfo';
+        context.subscriptions.push(statusBarItem);
         setStatusBarMessage();
+        statusBarItem.show();
     },
     stop(){
         statusBarItem && statusBarItem.dispose();

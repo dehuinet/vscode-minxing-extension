@@ -1,6 +1,7 @@
 import * as MXAPI from 'minxing-devtools-core';
 import * as vscode from 'vscode';
 import * as _ from 'underscore';
+import co from 'co';
 import * as Utils from '../utils';
 import {WifiInfo} from '../domain';
 class StatusBarItem{
@@ -18,16 +19,15 @@ class StatusBarItem{
             tooltip: '客户端连接状态',
             command: 'Minxing.getWifiInfo'
         });
-        this.setMsg();
-        this.ctrl.show();
+        this.setMsg().then(() => this.ctrl.show());
     }
-    setMsg(clientIps:Array<string> = []){
-        const {port, ip, connectionCount} : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
+    setMsg = co.wrap(function*(clientIps:Array<string> = []){
+        const {port, ip, connectionCount} : WifiInfo = (yield MXAPI.Wifi.info()) as WifiInfo;
         const ips = clientIps.map(ip => ip.replace(/^::ffff:/i, ''));
         const ipStr = _.isEmpty(ips) ? '' : `,客户端:${ips.join(', ')}`;
         const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
         this.ctrl.text = status;
-    }
+    });
     dispose(){
         this.ctrl.dispose();
     }

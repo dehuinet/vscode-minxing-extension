@@ -34,24 +34,20 @@ export default {
             console.log("启动WiFi日志服务...");
         })
     },
-    getWifiInfo() {
-        const {
-            port,
-            ip,
-            connectionCount
-        } : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
-
-        const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`
+    getWifiInfo: co.wrap(function*(){
+        const {port, ip, connectionCount, dataURL}: WifiInfo = (yield MXAPI.Wifi.info()) as WifiInfo;
+        const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`;
         const detail = "还可在下方状态栏查看";
         output.info(`${tip}, ${detail}`);
-    },
+        console.log(dataURL);
+    }),
     getWifiLog() {
         output.showChannel();
     },
     syncWifi(uri) {
         this.syncAllWifi(uri, false);
     },
-    syncAllWifi(uri, syncAll: boolean = true) {
+    syncAllWifi: co.wrap(function*(uri, syncAll: boolean = true){
         const filePath = Utils.getActivePathOrProject(uri);
         if (!filePath) {
             output.noActive();
@@ -63,11 +59,7 @@ export default {
             return;
         };
 
-        const {
-            port,
-            ip,
-            connectionCount
-        }: WifiInfo = MXAPI.Wifi.info();
+        const {port, ip, connectionCount}: WifiInfo = yield MXAPI.Wifi.info();
         if (0 === connectionCount) {
             output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
         }
@@ -81,14 +73,14 @@ export default {
 
         const projectName = path.basename(projectRootInfo.project);
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
-    },
+    }),
     webPreview: co.wrap(function *(){
         const logDebug = Utils.loggerBuilder.debug('wifi:webPreview');
         const logErr = Utils.loggerBuilder.error('wifi:webPreview');
         const CANCEL_ITEM = '录入新URL...', PROMPT = '请输入本地web工程页面,以端口开始',
               STORAGE_KEY = 'webPreview-url-history';
         try {
-            const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
+            const {port, ip, connectionCount}: WifiInfo = yield MXAPI.Wifi.info();
             const DEFAULT_URL = `${ip}:9200/index.html`;
             const localstorage: LocalStorage = yield Utils.getLocalStorage();
             const history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
@@ -127,8 +119,7 @@ export default {
             logErr(err);
         }
     }),
-    singlePagePreview(uri) {
-
+    singlePagePreview: co.wrap(function *(uri){
         const filePath = Utils.getPathOrActive(uri);
         if (!filePath) {
             output.warn("似乎没有可供预览的文件")
@@ -140,11 +131,7 @@ export default {
             output.warn("似乎没有可供预览的文件");
             return;
         }
-        const {
-            port,
-            ip,
-            connectionCount
-        } = MXAPI.Wifi.info()
+        const {port, ip, connectionCount} = yield MXAPI.Wifi.info()
         if (0 === connectionCount) {
             output.warn("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用")
         }
@@ -152,5 +139,5 @@ export default {
             file: filePath
         })
         output.info(`${fileName}同步成功,请在手机上查看运行效果!`);
-    }
+    })
 }

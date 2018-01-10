@@ -109,20 +109,32 @@ export default {
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
     },
     webPreview: co.wrap(function *(){
-        const STORAGE_KEY = 'webPreview-url-history';
+        const CANCEL_ITEM = '录入新URL...', PROMPT = '请输入本地web工程页面,以端口开始',
+              STORAGE_KEY = 'webPreview-url-history';
         try {
             const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
+            const DEFAULT_URL = `${ip}:9200/index.html`;
             const localstorage: LocalStorage = yield Utils.getLocalStorage();
             const history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
                 JSON.parse(localstorage.getItem(STORAGE_KEY));
-            const src = yield vscode.window.showInputBox({
-                value: _.isEmpty(history) ? `${ip}:9200/index.html` : history[history.length - 1],
-                prompt: `请输入本地web工程页面,以端口开始`
-            });
-            console.log('src-->', src, 'tmp dir path', Utils.getTempPath());
+            let src;
+            if ( _.isEmpty(history)) {
+                src = yield vscode.window.showInputBox({prompt: PROMPT, value: DEFAULT_URL});
+            } else {
+                let value = yield vscode.window.showQuickPick([CANCEL_ITEM, ...history], {
+                    ignoreFocusOut: true,
+                    placeHolder: '请选择WEB预览访问URL'
+                });
+                if (_.isEmpty(value) || value === CANCEL_ITEM) {
+                    src = yield vscode.window.showInputBox({prompt: PROMPT, value: history[0]});
+                } else {
+                    src = value;
+                }
+            }
+            console.log('src-->', src);
             if (!_.isEmpty(src)) {
                 if (history.indexOf(src) === -1) {
-                    history.push(src);
+                    history.unshift(src);
                     localstorage.setItem(STORAGE_KEY, JSON.stringify(history));
                 }
                 if (0 === connectionCount) {

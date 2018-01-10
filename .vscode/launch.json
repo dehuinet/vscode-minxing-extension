@@ -17,8 +17,7 @@
         "sourceMaps": true,
         "outFiles": [ "${workspaceRoot}/out/**/*.js" ],
         "preLaunchTask": "npm: watch"
-    },
-    {
+    }, {
         "name": "Extension Tests",
         "type": "extensionHost",
         "request": "launch",
@@ -33,6 +32,23 @@
         "stopOnEntry": false,
         "sourceMaps": true,
         "outFiles": [ "${workspaceRoot}/out/test/**/*.js" ],
+        "preLaunchTask": "npm: watch"
+    }, {
+        "name": "information_collection",
+        "type": "extensionHost",
+        "request": "launch",
+        "runtimeExecutable": "${execPath}",
+        "args": [
+            "${workspaceFolder}/../information_collection",
+            "--disable-extensions",
+            "--extensionDevelopmentPath=${workspaceRoot}"
+        ],
+        "env": {
+            "DEBUG": "*,-trace:*"
+        },
+        "stopOnEntry": false,
+        "sourceMaps": true,
+        "outFiles": [ "${workspaceRoot}/out/**/*.js" ],
         "preLaunchTask": "npm: watch"
     }]
 }

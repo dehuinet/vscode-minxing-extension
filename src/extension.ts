@@ -36,4 +36,5 @@ function initCommands(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+    wifi.stop();
 }

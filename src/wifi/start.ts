@@ -3,12 +3,16 @@ import * as vscode from 'vscode';
 import * as _ from 'underscore';
 import * as Utils from '../utils';
 import {WifiInfo} from '../domain';
+let statusBarItem;
 function setStatusBarMessage(clientIps:Array<string> = []) {
     const {port, ip, connectionCount} : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
     const ips = clientIps.map(ip => ip.replace(/^::ffff:/i, ''));
     const ipStr = _.isEmpty(ips) ? '' : `,客户端:${ips.join(', ')}`;
     const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
-    vscode.window.setStatusBarMessage(status);
+    if (statusBarItem == null) {
+        statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 2);
+    }
+    statusBarItem.text = status;
 }
 export default {
     start() {
@@ -26,5 +30,8 @@ export default {
             }
         });
         setStatusBarMessage();
+    },
+    stop(){
+        statusBarItem && statusBarItem.dispose();
     }
 };

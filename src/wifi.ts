@@ -109,6 +109,8 @@ export default {
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
     },
     webPreview: co.wrap(function *(){
+        const logDebug = Utils.loggerBuilder.debug('wifi:webPreview');
+        const logErr = Utils.loggerBuilder.error('wifi:webPreview');
         const CANCEL_ITEM = '录入新URL...', PROMPT = '请输入本地web工程页面,以端口开始',
               STORAGE_KEY = 'webPreview-url-history';
         try {
@@ -131,7 +133,7 @@ export default {
                     src = value;
                 }
             }
-            console.log('src-->', src);
+            logDebug('src: %s', src);
             if (!_.isEmpty(src)) {
                 if (history.indexOf(src) === -1) {
                     history.unshift(src);
@@ -148,7 +150,7 @@ export default {
                 output.info('预览成功!');
             }
         } catch (err) {
-            console.log(`show input box error->${err}`);
+            logErr(err);
         }
     }),
     singlePagePreview(uri) {

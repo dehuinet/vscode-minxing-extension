@@ -46,7 +46,7 @@ export default {
             logDebug('qrcodeFilePath: %s', qrcodeFilePath);
             if (!_.isEmpty(qrcodeFilePath)) {
                 const previewUri = vscode.Uri.file(qrcodeFilePath);
-                yield vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, qrCodeTitle);
+                yield vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.One, qrCodeTitle);
             }
         } catch (error) {
             logErr(error);

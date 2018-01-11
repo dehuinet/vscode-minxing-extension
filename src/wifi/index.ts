@@ -35,15 +35,22 @@ export default {
         })
     },
     getWifiInfo: co.wrap(function*(){
-        const {port, ip, connectionCount, dataURL}: WifiInfo = (yield MXAPI.Wifi.info(true)) as WifiInfo;
-        const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`;
-        const detail = "还可在下方状态栏查看";
-        output.info(`${tip}, ${detail}`);
-        if (!_.isEmpty(dataURL)) {
-            const document = yield vscode.workspace.openTextDocument({
-                content: dataURL
-            });
-            vscode.window.showTextDocument(document);
+        const logDebug = Utils.loggerBuilder.debug('Wifi:getWifiInfo');
+        const logErr = Utils.loggerBuilder.error('Wifi:getWifiInfo');
+        const qrCodeTitle = '扫一扫 手机连接二维码';
+        try {
+            const {port, ip, connectionCount, qrcodeFilePath}: WifiInfo = (yield MXAPI.Wifi.info(qrCodeTitle)) as WifiInfo;
+            const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`;
+            const detail = "还可在下方状态栏查看";
+            output.info(`${tip}, ${detail}`);
+            logDebug('qrcodeFilePath: %s', qrcodeFilePath);
+            if (!_.isEmpty(qrcodeFilePath)) {
+                const previewUri = vscode.Uri.file(qrcodeFilePath);
+                yield vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, qrCodeTitle);
+            }
+        } catch (error) {
+            logErr(error);
+            throw error;
         }
     }),
     getWifiLog() {

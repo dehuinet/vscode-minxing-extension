@@ -87,7 +87,7 @@ export default {
         try {
             const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
             const DEFAULT_URL = `${ip}:9200/index.html`;
-            const localstorage: LocalStorage = yield Utils.getLocalStorage();
+            const localstorage: LocalStorage = yield MXAPI.Utils.getLocalStorage();
             const history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
                 JSON.parse(localstorage.getItem(STORAGE_KEY));
             let src;

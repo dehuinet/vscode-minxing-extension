@@ -1,9 +1,7 @@
 import * as MXAPI from 'minxing-devtools-core';
 import * as vscode from 'vscode';
-import * as storage from 'node-localstorage';
 import * as path from 'path';
 import co from 'co';
-import * as fsp from 'fs-promise';
 import debug from 'debug';
 import {WifiInfo, LocalStorage} from './domain';
 import * as cluster from 'cluster';
@@ -23,16 +21,6 @@ export const loggerBuilder = {
 export function getTempPath(): string {
     const tempPath = path.resolve(path.dirname(__dirname), 'temp');
     return tempPath;
-}
-export function getLocalStorage(): Promise<LocalStorage> {
-    if (localStoragePromise == null) {
-        localStoragePromise = co(function*(){
-            const storageHome = path.join(getTempPath(), 'localstorage');
-            yield fsp.mkdirs(storageHome);
-            return new storage.LocalStorage(storageHome);
-        });
-    }
-    return localStoragePromise;
 }
 export function getRandomNum(min: number, max: number): number {
     min = Math.ceil(min);

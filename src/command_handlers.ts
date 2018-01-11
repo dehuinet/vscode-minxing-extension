@@ -6,6 +6,7 @@ import addProjectTemplate from './add_project_template';
 import addPageTemplate from './add_page_template';
 import build from './build';
 import config from './config';
+import vueSeed from './vue_seed';
 
 interface CommandConfig extends vscode.QuickPickItem{
     command: string,
@@ -44,5 +45,6 @@ export default {
     syncAll: wifi.syncAllWifi.bind(wifi),
     webPreview: wifi.webPreview.bind(wifi),
     singlePagePreview: wifi.singlePagePreview.bind(wifi),
-    build
+    build,
+    addVueSeed: vueSeed.add
 }

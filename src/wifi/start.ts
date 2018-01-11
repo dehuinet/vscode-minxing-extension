@@ -19,16 +19,17 @@ class StatusBarItem{
             tooltip: '客户端连接状态',
             command: 'Minxing.getWifiInfo'
         });
-        this.setMsg().then(() => this.ctrl.show());
+        this.setMsg();
+        this.ctrl.show();
     }
-    setMsg = co.wrap(function*(clientIps:Array<string> = []){
-        const {port, ip, connectionCount} : WifiInfo = (yield MXAPI.Wifi.info()) as WifiInfo;
+    setMsg(clientIps:Array<string> = []){
+        const {port, ip, connectionCount} : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
         const ips = clientIps.map(ip => ip.replace(/^::ffff:/i, ''));
         const ipStr = _.isEmpty(ips) ? '' : `,客户端:${ips.join(', ')}`;
         const icon = connectionCount > 0 ? 'pulse' : 'radio-tower';
         const status = `$(${icon}) IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
         this.ctrl.text = status;
-    });
+    }
     dispose(){
         this.ctrl.dispose();
     }

@@ -1,30 +1,15 @@
-'use strict';
-
-import { WifiInfo } from './domain';
-import * as vscode from 'vscode';
-import * as Utils from './utils';
-
-import * as MXAPI from 'minxing-devtools-core';
-
-import output from './output';
+import * as _ from 'underscore';
 import * as path from 'path';
+import * as vscode from 'vscode';
+import * as MXAPI from 'minxing-devtools-core';
+import co from 'co';
+import {WifiInfo, LocalStorage} from '../domain';
+import * as Utils from '../utils';
+import output from '../output';
+import start from './start';
 
 export default {
-    start() {
-        const tempPath: string = Utils.getTempPath();
-        const port: number =  Utils.getRandomNum(1001, 9999);
-        MXAPI.Wifi.start({
-            tempPath,
-            port,
-            onConnection: () => {
-                this.setStatusBarMessage();
-            },
-            onClose: () => {
-                this.setStatusBarMessage();
-            }
-        });
-        this.setStatusBarMessage();
-    },
+    ...start,
     clearTempCache() {
         const tempPath: string = Utils.getTempPath();
         MXAPI.clearTemp(tempPath);
@@ -48,15 +33,6 @@ export default {
         .then(() => {
             console.log("启动WiFi日志服务...");
         })
-    },
-    setStatusBarMessage() {
-        const {
-            port,
-            ip,
-            connectionCount
-        } : WifiInfo = MXAPI.Wifi.info() as WifiInfo;
-        const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}`;
-        vscode.window.setStatusBarMessage(status);
     },
     getWifiInfo() {
         const {
@@ -86,7 +62,7 @@ export default {
             output.invalidProject(filePath);
             return;
         };
-        
+
         const {
             port,
             ip,
@@ -95,9 +71,9 @@ export default {
         if (0 === connectionCount) {
             output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
         }
-        
+
         const updateAll: number = syncAll ? 1 : 0;
-        
+
         MXAPI.Wifi.sync({
             project: projectRootInfo.project,
             updateAll: updateAll
@@ -106,39 +82,53 @@ export default {
         const projectName = path.basename(projectRootInfo.project);
         output.info(`${projectName}同步成功,请在手机上查看运行效果!`);
     },
-    webPreview() {
-        const {
-            port,
-            ip,
-            connectionCount
-        }: WifiInfo = MXAPI.Wifi.info();
-        
-
-        vscode.window.showInputBox({
-            "value": `${ip}:9200/index.html`,
-            "prompt": `请输入本地web工程页面,以端口开始`
-        })
-        .then(src => {
-            console.log('src-->', src);
-            if (src) {
+    webPreview: co.wrap(function *(){
+        const logDebug = Utils.loggerBuilder.debug('wifi:webPreview');
+        const logErr = Utils.loggerBuilder.error('wifi:webPreview');
+        const CANCEL_ITEM = '录入新URL...', PROMPT = '请输入本地web工程页面,以端口开始',
+              STORAGE_KEY = 'webPreview-url-history';
+        try {
+            const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
+            const DEFAULT_URL = `${ip}:9200/index.html`;
+            const localstorage: LocalStorage = yield Utils.getLocalStorage();
+            const history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
+                JSON.parse(localstorage.getItem(STORAGE_KEY));
+            let src;
+            if ( _.isEmpty(history)) {
+                src = yield vscode.window.showInputBox({prompt: PROMPT, value: DEFAULT_URL});
+            } else {
+                let value = yield vscode.window.showQuickPick([CANCEL_ITEM, ...history], {
+                    ignoreFocusOut: true,
+                    placeHolder: '请选择WEB预览访问URL'
+                });
+                if (_.isEmpty(value) || value === CANCEL_ITEM) {
+                    src = yield vscode.window.showInputBox({prompt: PROMPT, value: history[0]});
+                } else {
+                    src = value;
+                }
+            }
+            logDebug('src: %s', src);
+            if (!_.isEmpty(src)) {
+                if (history.indexOf(src) === -1) {
+                    history.unshift(src);
+                    localstorage.setItem(STORAGE_KEY, JSON.stringify(history));
+                }
                 if (0 === connectionCount) {
                     output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
                 }
-                const err = MXAPI.Wifi.webPreview({
-                    src
-                })
+                const err = MXAPI.Wifi.webPreview({src});
                 if (err) {
                     output.warn(err);
                     return;
                 }
                 output.info('预览成功!');
             }
-        }, e => {
-            console.log(`show input box error->${e}`);
-        });
-    },
+        } catch (err) {
+            logErr(err);
+        }
+    }),
     singlePagePreview(uri) {
-        
+
         const filePath = Utils.getPathOrActive(uri);
         if (!filePath) {
             output.warn("似乎没有可供预览的文件")

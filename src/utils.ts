@@ -1,22 +1,44 @@
-'use strict';
-
 import * as MXAPI from 'minxing-devtools-core';
 import * as vscode from 'vscode';
-import {
-    WifiInfo
-} from './domain';
+import * as storage from 'node-localstorage';
 import * as path from 'path';
+import co from 'co';
+import * as fsp from 'fs-promise';
+import debug from 'debug';
+import {WifiInfo, LocalStorage} from './domain';
+import * as cluster from 'cluster';
+import * as _ from 'underscore';
+import * as pckg from '../package.json';
+
+debug.log = console.log;
+let localStoragePromise;
+
+export const loggerBuilder = {
+    trace: _.partial(_loggerBuilder, 'trace'),
+    debug: _.partial(_loggerBuilder, 'debug'),
+    info: _.partial(_loggerBuilder, 'info'),
+    warn: _.partial(_loggerBuilder, 'warn'),
+    error: _.partial(_loggerBuilder, 'error')
+};
 export function getTempPath(): string {
     const tempPath = path.resolve(path.dirname(__dirname), 'temp');
     return tempPath;
+}
+export function getLocalStorage(): Promise<LocalStorage> {
+    if (localStoragePromise == null) {
+        localStoragePromise = co(function*(){
+            const storageHome = path.join(getTempPath(), 'localstorage');
+            yield fsp.mkdirs(storageHome);
+            return new storage.LocalStorage(storageHome);
+        });
+    }
+    return localStoragePromise;
 }
 export function getRandomNum(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
 export function getPathOrActive(uri): string {
     uri = uri && uri.fsPath ? uri.fsPath : uri;
     let filePath = uri;
@@ -31,7 +53,6 @@ export function getPathOrActive(uri): string {
     }
     return filePath;
 }
-
 export function getActivePathOrProject(uri): string {
     let filePath = getPathOrActive(uri);
     if (!filePath && vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
@@ -39,4 +60,10 @@ export function getActivePathOrProject(uri): string {
         filePath = project.fsPath;
     }
     return filePath;
+}
+function _loggerBuilder(level, category){
+    if (cluster.isWorker) {
+        return debug(`${level}:${(<any>pckg).name}[${cluster.worker.process.pid}/${cluster.worker.id}]:${category}`);
+    }
+    return debug(`${level}:${(<any>pckg).name}:${category}`);
 }

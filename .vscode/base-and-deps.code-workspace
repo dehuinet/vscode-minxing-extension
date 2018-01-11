@@ -1,0 +1,33 @@
+{
+  "folders": [{
+    "path": ".."
+  }, {
+    "path": "../../minxing-devtools-core"
+  }],
+  "settings": {
+    "debug.inlineValues": true,
+    "debug.openExplorerOnEnd": true,
+    "debug.allowBreakpointsEverywhere": false,
+    "files.defaultLanguage": "javascript",
+    "files.exclude": {
+      "node_modules/.bin": true
+    },
+    "files.trimTrailingWhitespace": true,
+    "editor.snippetSuggestions": "top",
+    "editor.tabCompletion": true,
+    "editor.wordWrap": "on",
+    "editor.detectIndentation": false,
+    "eslint.autoFixOnSave": true,
+    "eslint.enable": true,
+    "explorer.autoReveal": true,
+    "extensions.autoUpdate": true,
+    "javascript.validate.enable": false,
+    "projectManager.groupList": true,
+    "projectManager.sortList": "Recent",
+    "projectManager.openInNewWindowWhenClickingInStatusBar": true,
+    "window.openFilesInNewWindow": "off",
+    "workbench.editor.closeOnFileDelete": false,
+    "workbench.editor.revealIfOpen": true,
+    "vsicons.presets.angular": false
+  }
+}

@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     output.init();
     output.showChannel();
     template.checkAllTemplateUpdate();
-    wifi.start();
+    wifi.start(context);
     wifi.log();
     initCommands(context);
 }
@@ -38,4 +38,5 @@ function initCommands(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+    wifi.stop();
 }

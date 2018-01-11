@@ -39,14 +39,14 @@ export default {
         const port: number =  Utils.getRandomNum(1001, 9999);
         MXAPI.Wifi.start({
             tempPath, port,
-            onConnection(clientIps:Array<string>, clientIp:string){
+            onConnection: co.wrap(function*(clientIps:Array<string>, clientIp:string){
                 StatusBarItem.instance.setMsg(clientIps);
-                vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已连接到 VSCode。可以开始调试了...`);
-            },
-            onClose(clientIps:Array<string>, clientIp:string){
+                yield vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已连接到 VSCode。可以开始调试了...`);
+            }),
+            onClose: co.wrap(function*(clientIps:Array<string>, clientIp:string){
                 StatusBarItem.instance.setMsg(clientIps);
-                vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已断离 VSCode`);
-            }
+                yield vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已断离 VSCode`);
+            })
         });
         context.subscriptions.push(StatusBarItem.instance.ctrl);
     },

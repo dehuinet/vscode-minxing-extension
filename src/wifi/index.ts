@@ -39,7 +39,6 @@ export default {
         const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`;
         const detail = "还可在下方状态栏查看";
         output.info(`${tip}, ${detail}`);
-        console.log(dataURL);
     }),
     getWifiLog() {
         output.showChannel();

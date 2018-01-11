@@ -1,6 +1,6 @@
-'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import 'source-map-support/register'
 import * as vscode from 'vscode';
 import commandHandlers from './command_handlers';
 import output from './output';

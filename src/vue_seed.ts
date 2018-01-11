@@ -40,24 +40,23 @@ function addTemplate({
 }) {
     const newAppProjectPath = path.resolve(output, name);
     const uri = vscode.Uri.file(newAppProjectPath);
-    MXAPI.VueSeed.add({
+    
+    var err = MXAPI.VueSeed.add({
         origin,
         name,
         output
-    }).then(({err}) => {
-        if (err) {
-            vscode.window.showWarningMessage(`${err}。是否采用默认模版？`, '是')
-                .then(confirm => {
-                    if (confirm) {
-                        addTemplate({name, output});
-                    }
-                })
-        } else {
-            vscode.commands.executeCommand('vscode.openFolder', uri, false);
-        }
-    }).catch(e => {
-        output.warn('新建模版失败,请联系管理员!');
-    });
+    })
+
+    if (err) {
+        vscode.window.showWarningMessage(`${err}。是否采用默认模版？`, '是')
+            .then(confirm => {
+                if (confirm) {
+                    addTemplate({name, output});
+                }
+            })
+    } else {
+        vscode.commands.executeCommand('vscode.openFolder', uri, false);
+    }
 }
 
 

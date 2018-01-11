@@ -6,7 +6,7 @@ import co from 'co';
 import {WifiInfo, LocalStorage} from '../domain';
 import * as Utils from '../utils';
 import output from '../output';
-import start from './start';
+import start, {statusBarItem} from './start';
 
 export default {
     ...start,
@@ -39,6 +39,7 @@ export default {
         const logErr = Utils.loggerBuilder.error('Wifi:getWifiInfo');
         const qrCodeTitle = '扫一扫 手机连接二维码';
         try {
+            statusBarItem.update();
             const {port, ip, connectionCount, qrcodeFilePath}: WifiInfo = (yield MXAPI.Wifi.info(qrCodeTitle)) as WifiInfo;
             const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`;
             const detail = "还可在下方状态栏查看";

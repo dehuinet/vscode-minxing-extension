@@ -3,4 +3,5 @@ export interface WifiInfo{
     port?: number;
     connectionCount?: number;
     qrcodeFilePath: string;
+    remoteIps: Array<string>;
 }

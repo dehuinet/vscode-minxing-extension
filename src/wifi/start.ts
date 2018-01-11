@@ -25,7 +25,8 @@ class StatusBarItem{
         const {port, ip, connectionCount} : WifiInfo = (yield MXAPI.Wifi.info()) as WifiInfo;
         const ips = clientIps.map(ip => ip.replace(/^::ffff:/i, ''));
         const ipStr = _.isEmpty(ips) ? '' : `,客户端:${ips.join(', ')}`;
-        const status = `IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
+        const icon = connectionCount > 0 ? 'pulse' : 'radio-tower';
+        const status = `$(${icon}) IP:${ip.join(' | ')}, 端口:${port},连接数:${connectionCount}${ipStr}`;
         this.ctrl.text = status;
     });
     dispose(){

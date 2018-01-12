@@ -1,7 +1,8 @@
-'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import 'source-map-support/register'
 import * as vscode from 'vscode';
+import co from 'co';
 import commandHandlers from './command_handlers';
 import output from './output';
 import wifi from './wifi';
@@ -9,14 +10,14 @@ import config from './config';
 import template from './template';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export const activate = co.wrap(function*(context: vscode.ExtensionContext){
     output.init();
     output.showChannel();
     template.checkAllTemplateUpdate();
-    wifi.start(context);
+    yield wifi.start(context);
     wifi.log();
     initCommands(context);
-}
+});
 
 function initCommands(context: vscode.ExtensionContext) {
     const subscriptions = config.commands.reduce((subscriptions, command) => {

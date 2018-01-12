@@ -37,9 +37,9 @@ class StatusBarItem{
 }
 export const statusBarItem = StatusBarItem.instance;
 export default {
-    start(context) {
+    start: co.wrap(function *(context){
         const tempPath: string = Utils.getTempPath();
-        const port: number =  Utils.getRandomNum(1001, 9999);
+        const port: number = yield MXAPI.Utils.getServerPort(1001, 9999);
         MXAPI.Wifi.start({
             tempPath, port,
             onConnection: co.wrap(function*(clientIp:string){
@@ -53,7 +53,7 @@ export default {
         });
         StatusBarItem.instance.update();
         context.subscriptions.push(StatusBarItem.instance.ctrl);
-    },
+    }),
     stop(){
         StatusBarItem.instance.dispose();
     }

@@ -9,7 +9,7 @@
         "应用模板",
         "日志输出"
     ],
-    "version": "0.0.23",
+    "version": "0.0.24",
     "publisher": "minxing",
     "engines": {
         "vscode": "^1.17.0"
@@ -111,7 +111,7 @@
     "dependencies": {
         "co": "^4.6.0",
         "debug": "^3.1.0",
-        "minxing-devtools-core": "^1.0.17",
+        "minxing-devtools-core": "^1.0.18",
         "source-map-support": "^0.5.0",
         "underscore": "^1.8.3"
     },

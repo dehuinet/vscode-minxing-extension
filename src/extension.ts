@@ -6,19 +6,21 @@ import co from 'co';
 import commandHandlers from './command_handlers';
 import output from './output';
 import wifi from './wifi';
-import commandsConfig from './config';
+import config from './config';
+import template from './template';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export const activate = co.wrap(function*(context: vscode.ExtensionContext){
     output.init();
     output.showChannel();
+    template.checkAllTemplateUpdate();
     yield wifi.start(context);
     wifi.log();
     initCommands(context);
 });
 
 function initCommands(context: vscode.ExtensionContext) {
-    const subscriptions = commandsConfig.reduce((subscriptions, command) => {
+    const subscriptions = config.commands.reduce((subscriptions, command) => {
         const curSub = vscode.commands.registerCommand(`${command.command}`, uri => {
             const namespace = 'Minxing';
             const c = command.command;

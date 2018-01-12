@@ -84,6 +84,12 @@
                 "title": "清除临时文件缓存",
                 "category": "Minxing",
                 "description": "clear temp cache"
+            },
+            {
+                "command": "Minxing.addVueSeed",
+                "title": "新建vue项目",
+                "category": "Minxing",
+                "description": "new vue seed project"
             }
         ],
         "menus": {
@@ -99,6 +105,20 @@
                     "group": "navigation"
                 }
             ]
+        },
+        "configuration": {
+            "type": "object",
+            "title": "Minxing Devtools configuration",
+            "properties": {
+                "Minxing.vue-seed-origin": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "模版仓库来源"
+                }
+            }
         }
     },
     "scripts": {

@@ -5,7 +5,8 @@ import wifi from './wifi';
 import addProjectTemplate from './add_project_template';
 import addPageTemplate from './add_page_template';
 import build from './build';
-import commandsConfig from './config';
+import config from './config';
+import vueSeed from './vue_seed';
 
 interface CommandConfig extends vscode.QuickPickItem{
     command: string,
@@ -15,7 +16,7 @@ interface CommandConfig extends vscode.QuickPickItem{
 
 export default {
     mainEntry(uri) {
-        const quickItems: Array<vscode.QuickPickItem> = commandsConfig
+        const quickItems: Array<vscode.QuickPickItem> = config.commands
                 .filter(c => c.command !== "Minxing.mainEntry")
                 .map(cmd => Object.assign({}, cmd, {"label": cmd.title}));
         vscode.window.showQuickPick(quickItems, {
@@ -29,6 +30,7 @@ export default {
                 return;
             }
             const method = cmd.split('.')[1];
+            console.log('methd-->', method);
             if (this[method] instanceof Function) {
                 this[method](uri);
             }
@@ -43,5 +45,6 @@ export default {
     syncAll: wifi.syncAllWifi.bind(wifi),
     webPreview: wifi.webPreview.bind(wifi),
     singlePagePreview: wifi.singlePagePreview.bind(wifi),
-    build 
+    build,
+    addVueSeed: vueSeed.add
 }

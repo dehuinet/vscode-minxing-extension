@@ -6,7 +6,7 @@ export default {
     init() {
         if (this._channel) return;
         this._channel = vscode.window.createOutputChannel('敏行');
-        this._channel.appendLine(`vscode-minxing-devtolls已启动！`);
+        this._channel.appendLine(`vscode-minxing-devtools已启动！`);
     },
     log(str: string) {
         this._channel.appendLine(str);

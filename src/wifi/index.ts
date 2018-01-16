@@ -96,7 +96,7 @@ export default {
             const {port, ip, connectionCount}: WifiInfo = MXAPI.Wifi.info();
             const DEFAULT_URL = `${ip}:9200/index.html`;
             const localstorage: LocalStorage = yield MXAPI.Utils.getLocalStorage();
-            const history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
+            let history: Array<string> = localstorage.getItem(STORAGE_KEY) == null ? [] :
                 JSON.parse(localstorage.getItem(STORAGE_KEY));
             let src;
             if ( _.isEmpty(history)) {
@@ -114,10 +114,11 @@ export default {
             }
             logDebug('src: %s', src);
             if (!_.isEmpty(src)) {
-                if (history.indexOf(src) === -1) {
-                    history.unshift(src);
-                    localstorage.setItem(STORAGE_KEY, JSON.stringify(history));
+                if (history.indexOf(src) > -1) {
+                    history = history.filter(h => h !== src);
                 }
+                history.unshift(src);
+                localstorage.setItem(STORAGE_KEY, JSON.stringify(history));
                 if (0 === connectionCount) {
                     output.info("当前网速过慢或没有设备处于连接状态,可能会影响相关同步功能的使用");
                 }

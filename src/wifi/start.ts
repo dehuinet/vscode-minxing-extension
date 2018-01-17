@@ -4,6 +4,7 @@ import * as _ from 'underscore';
 import co from 'co';
 import * as Utils from '../utils';
 import {WifiInfo} from '../domain';
+import output from '../output';
 class StatusBarItem{
     static _instance: StatusBarItem;
     static get instance(){
@@ -35,6 +36,7 @@ class StatusBarItem{
         this.ctrl.dispose();
     }
 }
+const TIMEOUT = 4000;
 export const statusBarItem = StatusBarItem.instance;
 export default {
     start: co.wrap(function *(context){
@@ -44,11 +46,11 @@ export default {
             tempPath, port,
             onConnection: co.wrap(function*(clientIp:string){
                 StatusBarItem.instance.update();
-                yield vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已连接到 VSCode。可以开始调试了...`);
+                yield output.info(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已连接到 VSCode。可以开始调试了...`, TIMEOUT);
             }),
             onClose: co.wrap(function*(clientIp:string){
                 StatusBarItem.instance.update();
-                yield vscode.window.showInformationMessage(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已断离 VSCode`);
+                yield output.info(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已断离 VSCode`, TIMEOUT);
             })
         });
         StatusBarItem.instance.update();

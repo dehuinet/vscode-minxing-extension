@@ -43,12 +43,12 @@ export default {
             const {port, ip, connectionCount, qrcodeFilePath}: WifiInfo = (yield MXAPI.Wifi.info(qrCodeTitle)) as WifiInfo;
             const tip = `IP :${JSON.stringify(ip)} 端口:${port} 设备连接数:${connectionCount}`;
             const detail = "还可在下方状态栏查看";
-            output.info(`${tip}, ${detail}`);
             logDebug('qrcodeFilePath: %s', qrcodeFilePath);
             if (!_.isEmpty(qrcodeFilePath)) {
                 const previewUri = vscode.Uri.file(qrcodeFilePath);
                 yield vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.One, qrCodeTitle);
             }
+            yield output.info(`${tip}, ${detail}`, 4000);
         } catch (error) {
             logErr(error);
             throw error;

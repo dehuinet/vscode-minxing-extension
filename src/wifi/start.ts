@@ -46,11 +46,9 @@ export default {
             tempPath, port,
             onConnection: co.wrap(function*(clientIp:string){
                 StatusBarItem.instance.update();
-                yield output.info(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已连接到 VSCode。可以开始调试了...`, TIMEOUT);
             }),
             onClose: co.wrap(function*(clientIp:string){
                 StatusBarItem.instance.update();
-                yield output.info(`调试终端 [${clientIp.replace(/^::ffff:/i, '')}] 已断离 VSCode`, TIMEOUT);
             })
         });
         StatusBarItem.instance.update();

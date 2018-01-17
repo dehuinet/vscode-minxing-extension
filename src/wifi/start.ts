@@ -35,7 +35,6 @@ class StatusBarItem{
         this.ctrl.dispose();
     }
 }
-const TIMEOUT = 4000;
 export const statusBarItem = StatusBarItem.instance;
 export default {
     start: co.wrap(function *(context){

@@ -4,7 +4,6 @@ import * as _ from 'underscore';
 import co from 'co';
 import * as Utils from '../utils';
 import {WifiInfo} from '../domain';
-import output from '../output';
 class StatusBarItem{
     static _instance: StatusBarItem;
     static get instance(){

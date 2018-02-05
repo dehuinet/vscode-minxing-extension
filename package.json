@@ -9,7 +9,7 @@
         "应用模板",
         "日志输出"
     ],
-    "version": "0.0.23",
+    "version": "0.0.25",
     "publisher": "minxing",
     "engines": {
         "vscode": "^1.17.0"
@@ -36,6 +36,12 @@
                 "title": "新增项目模版",
                 "category": "Minxing",
                 "description": "add project template"
+            },
+            {
+                "command": "Minxing.addVueSeed",
+                "title": "新建vue项目",
+                "category": "Minxing",
+                "description": "new vue seed project"
             },
             {
                 "command": "Minxing.addPageTemplate",
@@ -84,12 +90,6 @@
                 "title": "清除临时文件缓存",
                 "category": "Minxing",
                 "description": "clear temp cache"
-            },
-            {
-                "command": "Minxing.addVueSeed",
-                "title": "新建vue项目",
-                "category": "Minxing",
-                "description": "new vue seed project"
             }
         ],
         "menus": {
@@ -131,7 +131,7 @@
     "dependencies": {
         "co": "^4.6.0",
         "debug": "^3.1.0",
-        "minxing-devtools-core": "^1.0.18",
+        "minxing-devtools-core": "^1.0.23",
         "source-map-support": "^0.5.0",
         "underscore": "^1.8.3"
     },

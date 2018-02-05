@@ -80,6 +80,7 @@ export default {
         const updateAll: number = syncAll ? 1 : 0;
 
         MXAPI.Wifi.sync({
+            projectRootInfo,
             project: projectRootInfo.project,
             updateAll: updateAll
         });

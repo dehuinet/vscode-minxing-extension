@@ -11,9 +11,8 @@ export default (uri) => {
         output.noActive();
         return;
     }
-    const projectRootInfo = MXAPI.Utils.fetchProjectRootInfoByFile(filePath);
-
-    if (!projectRootInfo) {
+    const projectInfo = MXAPI.Utils.fetchProjectRootInfoByFile(filePath);
+    if (!projectInfo) {
         output.invalidProject(filePath);
         return;
     };
@@ -24,18 +23,17 @@ export default (uri) => {
         canSelectMany: false
     })
     .then((savePathArr) => {
-        console.log('savePathArr->', savePathArr);
         if (!savePathArr || savePathArr.length === 0) {
             return;
         }
         const savePath = savePathArr[0].fsPath;
 
         MXAPI.build({
-            projectRootPath: projectRootInfo.project,
+            projectInfo,
+            projectRootPath: projectInfo.project,
             savePath
         })
-        .then(appInfo => {
-            const zipPath = appInfo.path;
+        .then(zipPath => {
             const tip = `已成功打包为敏行插件应用!目录为${zipPath}`;
             const detail = "还可在vscode控制台末尾随时查看";
             output.info(`${tip}, ${detail}`);

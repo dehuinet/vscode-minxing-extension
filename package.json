@@ -9,7 +9,7 @@
         "应用模板",
         "日志输出"
     ],
-    "version": "0.0.26",
+    "version": "0.0.27",
     "publisher": "minxing",
     "engines": {
         "vscode": "^1.17.0"

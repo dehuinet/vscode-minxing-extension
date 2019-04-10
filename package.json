@@ -12,7 +12,7 @@
     "version": "0.0.29",
     "publisher": "minxing",
     "engines": {
-        "vscode": "^1.17.0"
+        "vscode": "^1.33.0"
     },
     "categories": [
         "Other"
@@ -131,14 +131,15 @@
     "dependencies": {
         "co": "^4.6.0",
         "debug": "^3.1.0",
+        "fs-extra": "^7.0.1",
         "minxing-devtools-core": "^1.0.23",
         "source-map-support": "^0.5.0",
         "underscore": "^1.8.3"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.33"
     }
 }

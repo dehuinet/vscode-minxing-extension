@@ -2,6 +2,7 @@ import * as _ from 'underscore';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import * as MXAPI from 'minxing-devtools-core';
+import * as fs from 'fs-extra';
 import co from 'co';
 import {WifiInfo, LocalStorage} from '../domain';
 import * as Utils from '../utils';
@@ -47,8 +48,9 @@ export default {
             output.info(`${tip}, ${detail}`);
             logDebug('qrcodeFilePath: %s', qrcodeFilePath);
             if (!_.isEmpty(qrcodeFilePath)) {
-                const previewUri = vscode.Uri.file(qrcodeFilePath);
-                yield vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.One, qrCodeTitle);
+                const htmlStr = yield fs.readFile(qrcodeFilePath);
+                const panel = vscode.window.createWebviewPanel(qrCodeTitle, qrCodeTitle, vscode.ViewColumn.One, {});
+                panel.webview.html = htmlStr;
             }
         } catch (error) {
             logErr(error);

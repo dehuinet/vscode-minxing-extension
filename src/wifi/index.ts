@@ -2,12 +2,18 @@ import * as _ from 'underscore';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import * as MXAPI from 'minxing-devtools-core';
-import * as fs from 'fs-extra';
+import * as fs from 'fs';
 import co from 'co';
 import {WifiInfo, LocalStorage} from '../domain';
 import * as Utils from '../utils';
 import output from '../output';
 import start, {statusBarItem} from './start';
+
+const readFile = (filePath, encoding) => new Promise((resolve, reject) => {
+    fs.readFile(filePath, encoding, function(err, ret) {
+        err ? reject(err) : resolve(ret);
+    })
+})
 
 export default {
     ...start,
@@ -48,7 +54,7 @@ export default {
             output.info(`${tip}, ${detail}`);
             logDebug('qrcodeFilePath: %s', qrcodeFilePath);
             if (!_.isEmpty(qrcodeFilePath)) {
-                const htmlStr = yield fs.readFile(qrcodeFilePath);
+                const htmlStr = yield readFile(qrcodeFilePath, 'utf-8');
                 const panel = vscode.window.createWebviewPanel(qrCodeTitle, qrCodeTitle, vscode.ViewColumn.One, {});
                 panel.webview.html = htmlStr;
             }

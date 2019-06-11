@@ -29,7 +29,6 @@ export default {
             if (!(level in console) || !(console[level] instanceof Function)) {
                 level = 'log'
             }
-            output.log(content);
             try{
                 console[level](JSON.parse(content));
                 output.log(JSON.parse(content));

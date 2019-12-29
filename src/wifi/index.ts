@@ -54,10 +54,9 @@ export default {
             logDebug('qrcodeFilePath: %s', qrcodeFilePath);
             if (!_.isEmpty(qrcodeFilePath)) {
                 const htmlStr = yield readFile(qrcodeFilePath, 'utf-8');
-                const panel = vscode.window.createWebviewPanel(qrCodeTitle, qrCodeTitle, vscode.ViewColumn.One, {});
-                panel.webview.options = {
+                const panel = vscode.window.createWebviewPanel(qrCodeTitle, qrCodeTitle, vscode.ViewColumn.One, {
                     enableScripts: true
-                };
+                });
                 panel.webview.html = htmlStr;
             }
         } catch (error) {

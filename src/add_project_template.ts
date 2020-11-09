@@ -9,9 +9,11 @@ const config = MXAPI.Template.Project.getConfig();
 export default () => {
     let curType = null;
     const types = Object.keys(config);
-    vscode.window.showQuickPick(types, {placeHolder: '请选择项目模版类型'})
-        .then(type => {
-            if (!type) return;
+    //Removed apicloud feature
+    // vscode.window.showQuickPick(types, {placeHolder: '请选择项目模版类型'})
+        // .then(type => {
+            // if (!type) return;
+            var type="html5";
             curType = type;
             const templateEntities = config[type];
             const templateKeys = Object.keys(templateEntities);
@@ -23,8 +25,8 @@ export default () => {
                     templateName: key
                 }
             })
-            return vscode.window.showQuickPick(templatePickItems, {placeHolder: '请选择模版'})
-        })
+          vscode.window.showQuickPick(templatePickItems, {placeHolder: '请选择模版'})
+        // })
         .then(templateEntity => {
             if (!templateEntity) return;
             const template = templateEntity.templateName;

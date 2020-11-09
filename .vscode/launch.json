@@ -39,7 +39,7 @@
         "request": "launch",
         "runtimeExecutable": "${execPath}",
         "args": [
-            "H:/minxing_workshop/github/derivative_h5_dist",
+            "/Volumes/Data/work/tmp/minxing",
             "--disable-extensions",
             "--extensionDevelopmentPath=${workspaceRoot}",
             "--preserve-symlinks-main"
